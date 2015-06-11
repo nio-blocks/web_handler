@@ -1,7 +1,13 @@
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
-from nio.metadata.properties import VersionProperty, ExpressionProperty
+from nio.metadata.properties import VersionProperty, ExpressionProperty, \
+    PropertyHolder, ListProperty
 from .broker import RequestResponseBroker
+
+
+class ResponseHeader(PropertyHolder):
+    header_name = ExpressionProperty(title='Name', default='Content-Type')
+    header_val = ExpressionProperty(title='Value', default='application/json')
 
 
 @Discoverable(DiscoverableType.block)
@@ -14,20 +20,44 @@ class WebOutput(Block):
     response_out = ExpressionProperty(title='Response Body', defualt='')
     response_status = ExpressionProperty(
         title='Response Status', defualt='200')
+    response_headers = ListProperty(ResponseHeader, title='Response Headers')
 
     def process_signals(self, signals, input_id='default'):
         for sig in signals:
             try:
                 req_id = self.id_val(sig)
-                rsp_body = self.response_out(sig)
+                rsp_body = self.build_body(sig)
                 rsp_status = int(self.response_status(sig))
+                rsp_headers = {
+                    header.header_name(sig): header.header_val(sig)
+                    for header in self.response_headers
+                }
             except:
                 self._logger.exception("Unable to build response")
                 continue
 
-            self._logger.debug(
-                "Writing response for request ID {}".format(req_id))
-            RequestResponseBroker.write_response(
-                req_id,
-                body=rsp_body,
-                status=rsp_status)
+            try:
+                self.put_response(req_id, rsp_body, rsp_headers, rsp_status)
+            except:
+                self._logger.exception("Unable to write response")
+
+    def build_body(self, signal):
+        """ Determine the body of the response given an input signal """
+        return self.response_out(signal)
+
+    def put_response(self, req_id, body, headers, status):
+        """ For a given request ID, write a response.
+
+        Args:
+            req_id: A request ID - should be taken from the WebHandler block
+            body: What to include in the response body, None or '' for no body
+            headers (dict): A dictionary containing the response headers to set
+            status (int): The HTTP response status code
+
+        Returns:
+            None
+        """
+        self._logger.debug(
+            "Writing response for request ID {}".format(req_id))
+        RequestResponseBroker.write_response(
+            req_id, body=body, headers=headers, status=status)

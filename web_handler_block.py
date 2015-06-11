@@ -31,7 +31,7 @@ class WebHandler(WebServer, Block):
     def start(self):
         super().start()
         # Start Web Server
-        self._logger.debug("STARTING SERVER")
+        self._logger.debug("Starting server")
         self.start_server()
 
     def stop(self):
@@ -39,8 +39,10 @@ class WebHandler(WebServer, Block):
         self.stop_server()
         super().stop()
 
-    def process_signals(self, signals, input_id='default'):
-        self._logger.debug("WOOO")
-
     def get_timeout_seconds(self):
+        """ The REST Handler will use this to determine how long to wait """
         return self.request_timeout.total_seconds()
+
+    def supports_method(self, method):
+        """ Returns True if the block should support the given HTTP method """
+        return True
