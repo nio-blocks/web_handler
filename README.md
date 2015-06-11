@@ -11,7 +11,7 @@ The `WebOutput` block is intended to respond to the requests made to the `WebHan
 
 ## Properties
  * **Port** (int): The port to launch the server on. Be sure the port is not already in use
- * **Endpoint** (str): An optional endpoint to launch the server on. The URL that requests should be made to will follow the form `http://<HOST>:<PORT>/<ENDPOINT>
+ * **Endpoint** (str): An optional endpoint to launch the server on. The URL that requests should be made to will follow the form `http://<HOST>:<PORT>/<ENDPOINT>`
  * **Max Request Timeout** (timedelta): How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs.
 
 ## Dependencies
@@ -31,3 +31,25 @@ One signal per request, each with the following attributes
  * **params**: A dictionary containing any URL parameters passed to the request.
  * **headers**: A dictionary containing any request headers included in the request.
  * **body**: For some requests, the payload of the HTTP request
+
+# WebOutput
+
+This block writes to the response for a given HTTP request made to a WebHandler block
+
+## Properties
+ * **Request ID** (expression): The same ID that was returned with the signal notified from the WebHandler block
+ * **Response Body** (expression): What the payload of the response should be. This should be a string or bytes, do any serialization in the expression or beforehand.
+ * **Response Status** (expression): An integer representing the HTTP status to return. Defaults to 200 (OK)
+ * **Response Headers** (list of expressions): A list of key/value pairs representing header names and header values to return in the HTTP response headers.
+
+## Dependencies
+None
+
+## Commands
+None
+
+## Input
+Any list of signals
+
+## Output
+None
