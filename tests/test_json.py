@@ -33,8 +33,6 @@ class TestJSONRequests(NIOBlockTestCase):
 
         self.output_block = WebJSONOutput()
         self.configure_block(self.output_block, {
-            'response_out': '{{ $body }}',
-            'id_val': '{{ $id }}',
             'response_status': '200'
         })
 
@@ -75,7 +73,7 @@ class TestJSONRequests(NIOBlockTestCase):
         the_sig = self.last_notified['default'][0]
         # Make sure the signal's body came through as an actual dictionary
         # and not a string due to the JSON handler being used
-        self.assertDictEqual(the_sig.body, json_obj)
+        self.assertDictEqual(the_sig.json_key, {"nested": "value"})
 
         # Now patch the write response
         with patch.object(RequestResponseBroker, 'write_response') as write:
@@ -84,8 +82,9 @@ class TestJSONRequests(NIOBlockTestCase):
 
             # Make sure write_response was called with the correct ID
             self.assertEqual(write.call_count, 1)
-            self.assertEqual(write.call_args[0][0], the_sig.id)
-            self.assertEqual(write.call_args[1]['body'], json.dumps(json_obj))
+            self.assertEqual(write.call_args[0][0], the_sig._id)
+            self.assertDictEqual(
+                json.loads(write.call_args[1]['body']), json_obj)
             self.assertEqual(
                 write.call_args[1]['headers']['Content-Type'],
                 'application/json')

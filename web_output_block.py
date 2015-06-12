@@ -46,7 +46,6 @@ class WebOutput(Block):
             for header in self.response_headers
         }
 
-
     def build_body(self, signal):
         """ Determine the body of the response given an input signal """
         return self.response_out(signal)
@@ -78,9 +77,18 @@ class WebJSONOutput(WebOutput):
     Content-Type header.
 
     """
+    # The JSON block will assume the ID is in a hidden field and that the
+    # body of the response is just the (non-hidden) contents of the signal
+    id_val = ExpressionProperty(title='Request ID', default='{{ $_id }}')
+    response_out = ExpressionProperty(
+        title='Response Body',
+        default='{{ json.dumps($to_dict(), default=str) }}')
 
     def build_body(self, signal):
-        return json.dumps(self.response_out(signal))
+        resp_obj = self.response_out(signal)
+        if not isinstance(resp_obj, str):
+            resp_obj = json.dumps(resp_obj)
+        return resp_obj
 
     def build_headers(self, signal):
         """ Determine the headers of the response given an input signal """

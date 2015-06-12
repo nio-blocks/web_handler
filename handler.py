@@ -36,33 +36,43 @@ class Handler(RESTHandler):
 
         # Generate a unique ID for this request
         request_id = uuid4()
-        out_sig = Signal({
-            'id': request_id,
-            'method': method,
-            'params': req.get_params(),
-            'headers': req._headers
-        })
 
-        if include_body:
-            try:
-                setattr(out_sig, 'body', self.get_body_for_signal(req))
-            except:
-                self._logger.exception("Unable to get request body")
-                raise
-
+        # Register this request with the broker
         self._logger.debug(
             "Registering request with request ID {}".format(request_id))
-        # Register this request with the broker
         RequestResponseBroker.register_request(
             request_id, req, rsp, self._blk.get_timeout_seconds())
 
+        # Next, notify the signal containing the request information
         self._logger.debug(
             "Notifiying request signal with request ID {}".format(request_id))
-        self._blk.notify_signals([out_sig])
+        try:
+            self._blk.notify_signals([self.build_output_signal(
+                request_id, req, method, include_body)])
+        except:
+            self._logger.exception("Unable to build signal for request")
+            raise
 
         # Wait for the response to be written, this call will block until
         # the resposne is written to or the timeout occurs
         RequestResponseBroker.wait_for_response(request_id)
+
+    def build_output_signal(self, request_id, req_obj,
+                            http_method, include_body):
+        out_sig = Signal({
+            'id': request_id,
+            'method': http_method,
+            'params': req_obj.get_params(),
+            'headers': req_obj._headers
+        })
+
+        if include_body:
+            try:
+                setattr(out_sig, 'body', self.get_body_for_signal(req_obj))
+            except:
+                self._logger.exception("Unable to get request body")
+                raise
+        return out_sig
 
     def get_body_for_signal(self, req):
         """ Get the body to store on the signal """
@@ -82,6 +92,7 @@ class Handler(RESTHandler):
         rsp.set_status(501)
         return False
 
+
 class JSONHandler(Handler):
 
     def get_body_for_signal(self, req):
@@ -94,3 +105,30 @@ class JSONHandler(Handler):
         if not (isinstance(req_body, list) or isinstance(req_body, dict)):
             return json.loads(req_body)
         return req_body
+
+    def build_output_signal(self, request_id, req_obj,
+                            http_method, include_body):
+        """ For the JSON Handler, return the body as the body of the signal """
+        self._logger.debug("Building output signal")
+        req_info = {
+            '_id': request_id,
+            '_method': http_method,
+            '_params': req_obj.get_params(),
+            '_headers': req_obj._headers
+        }
+
+        try:
+            if include_body:
+                req_body = self.get_body_for_signal(req_obj)
+            else:
+                req_body = {}
+        except:
+            self._logger.exception("Unable to get request body")
+            raise
+
+        if not isinstance(req_body, dict):
+            raise TypeError("The request body must be a dictionary")
+
+        req_body.update(req_info)
+
+        return Signal(req_body)
