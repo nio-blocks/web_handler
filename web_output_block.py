@@ -1,3 +1,4 @@
+import json
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties import VersionProperty, ExpressionProperty, \
@@ -28,10 +29,7 @@ class WebOutput(Block):
                 req_id = self.id_val(sig)
                 rsp_body = self.build_body(sig)
                 rsp_status = int(self.response_status(sig))
-                rsp_headers = {
-                    header.header_name(sig): header.header_val(sig)
-                    for header in self.response_headers
-                }
+                rsp_headers = self.build_headers(sig)
             except:
                 self._logger.exception("Unable to build response")
                 continue
@@ -40,6 +38,14 @@ class WebOutput(Block):
                 self.put_response(req_id, rsp_body, rsp_headers, rsp_status)
             except:
                 self._logger.exception("Unable to write response")
+
+    def build_headers(self, signal):
+        """ Determine the headers of the response given an input signal """
+        return {
+            header.header_name(signal): header.header_val(signal)
+            for header in self.response_headers
+        }
+
 
     def build_body(self, signal):
         """ Determine the body of the response given an input signal """
@@ -61,3 +67,25 @@ class WebOutput(Block):
             "Writing response for request ID {}".format(req_id))
         RequestResponseBroker.write_response(
             req_id, body=body, headers=headers, status=status)
+
+
+@Discoverable(DiscoverableType.block)
+class WebJSONOutput(WebOutput):
+
+    """ An output block that writes JSON data to the response.
+
+    The block will JSON encode the body and set the proper application/json
+    Content-Type header.
+
+    """
+
+    def build_body(self, signal):
+        return json.dumps(self.response_out(signal))
+
+    def build_headers(self, signal):
+        """ Determine the headers of the response given an input signal """
+        configured_headers = super().build_headers(signal)
+        if 'Content-Type' not in configured_headers:
+            configured_headers['Content-Type'] = 'application/json'
+
+        return configured_headers

@@ -1,3 +1,4 @@
+import json
 from uuid import uuid4
 from .broker import RequestResponseBroker
 from nio.common.signal.base import Signal
@@ -43,8 +44,14 @@ class Handler(RESTHandler):
         })
 
         if include_body:
-            setattr(out_sig, 'body', req.get_body())
+            try:
+                setattr(out_sig, 'body', self.get_body_for_signal(req))
+            except:
+                self._logger.exception("Unable to get request body")
+                raise
 
+        self._logger.debug(
+            "Registering request with request ID {}".format(request_id))
         # Register this request with the broker
         RequestResponseBroker.register_request(
             request_id, req, rsp, self._blk.get_timeout_seconds())
@@ -56,6 +63,10 @@ class Handler(RESTHandler):
         # Wait for the response to be written, this call will block until
         # the resposne is written to or the timeout occurs
         RequestResponseBroker.wait_for_response(request_id)
+
+    def get_body_for_signal(self, req):
+        """ Get the body to store on the signal """
+        return req.get_body()
 
     def validate_method(self, method, rsp):
         """ Make sure the HTTP method is supported by the block.
@@ -70,3 +81,16 @@ class Handler(RESTHandler):
 
         rsp.set_status(501)
         return False
+
+class JSONHandler(Handler):
+
+    def get_body_for_signal(self, req):
+        """ Parse the JSON of the body rather than use a string.
+
+        Raises:
+            ValueError: If the body does not contain valid JSON
+        """
+        req_body = req.get_body()
+        if not (isinstance(req_body, list) or isinstance(req_body, dict)):
+            return json.loads(req_body)
+        return req_body

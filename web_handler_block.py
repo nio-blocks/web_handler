@@ -1,5 +1,5 @@
 from .mixins.web_server.web_server_block import WebServer
-from .handler import Handler
+from .handler import Handler, JSONHandler
 from datetime import timedelta
 from nio.common.block.base import Block
 from nio.common.discovery import Discoverable, DiscoverableType
@@ -26,7 +26,10 @@ class WebHandler(WebServer, Block):
         self.configure_server({
             'host': self.host,
             'port': self.port
-        }, Handler(self.endpoint, self))
+        }, self.get_handler())
+
+    def get_handler(self):
+        return Handler(self.endpoint, self)
 
     def start(self):
         super().start()
@@ -46,3 +49,10 @@ class WebHandler(WebServer, Block):
     def supports_method(self, method):
         """ Returns True if the block should support the given HTTP method """
         return True
+
+
+@Discoverable(DiscoverableType.block)
+class WebJSONHandler(WebHandler):
+
+    def get_handler(self):
+        return JSONHandler(self.endpoint, self)
