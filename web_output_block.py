@@ -18,9 +18,9 @@ class WebOutput(Block):
 
     id_val = ExpressionProperty(title='Request ID', default='{{ $id }}')
 
-    response_out = ExpressionProperty(title='Response Body', defualt='')
+    response_out = ExpressionProperty(title='Response Body', default='')
     response_status = ExpressionProperty(
-        title='Response Status', defualt='200')
+        title='Response Status', default='200')
     response_headers = ListProperty(ResponseHeader, title='Response Headers')
 
     def process_signals(self, signals, input_id='default'):
