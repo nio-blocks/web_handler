@@ -59,6 +59,7 @@ class TestBroker(NIOBlockTestCase):
         """ Register a request in a new thread and return the ID and resp """
         req_id = uuid4()
         mock_rsp = self.get_mocked_response()
-        spawn(RequestResponseBroker.register_request, req_id,
-              self.get_mocked_request(), mock_rsp, timeout)
+        RequestResponseBroker.register_request(
+            req_id, self.get_mocked_request(), mock_rsp, timeout)
+        spawn(RequestResponseBroker.wait_for_response, req_id)
         return req_id, mock_rsp

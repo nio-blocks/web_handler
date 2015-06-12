@@ -45,21 +45,17 @@ class Handler(RESTHandler):
         if include_body:
             setattr(out_sig, 'body', req.get_body())
 
-        request_lock = RequestResponseBroker.get_lock(request_id)
-        request_lock.acquire()
+        # Register this request with the broker
+        RequestResponseBroker.register_request(
+            request_id, req, rsp, self._blk.get_timeout_seconds())
+
         self._logger.debug(
             "Notifiying request signal with request ID {}".format(request_id))
         self._blk.notify_signals([out_sig])
 
-        # Register this request with the broker, this call will block until
+        # Wait for the response to be written, this call will block until
         # the resposne is written to or the timeout occurs
-        RequestResponseBroker.register_request(
-            request_id, req, rsp, self._blk.get_timeout_seconds())
-
-        # The lock should be released by now, but in case it's not we'll
-        # safely reacquire and then release
-        request_lock.acquire(False)
-        request_lock.release()
+        RequestResponseBroker.wait_for_response(request_id)
 
     def validate_method(self, method, rsp):
         """ Make sure the HTTP method is supported by the block.

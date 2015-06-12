@@ -1,18 +1,14 @@
-from collections import defaultdict
-from nio.modules.threading import Event, Lock
+from nio.modules.threading import Event
 
 
 class RequestResponseBroker(object):
 
     _mappings = {}
-    _locks = defaultdict(Lock)
 
     @classmethod
     def register_request(cls, id, req, rsp, timeout):
-        """ Register that a request has occurred and wait for a response.
+        """ Register that a request has occurred by saving the relevant info
 
-        Note, this method will block the current thread until the response
-        is written or the timeout has occurred.
 
         Args:
             id: A unique identifier for this request. This same ID should be
@@ -34,26 +30,41 @@ class RequestResponseBroker(object):
             'event': req_event
         }
 
-        # Let's release the lock for this request now that we've saved the
-        # object in mappings.
-        # We're going to first do a non-blocking acquire before releasing, in
-        # case the lock is not locked
-        req_lock = cls.get_lock(id)
-        req_lock.acquire(False)
-        req_lock.release()
+    @classmethod
+    def wait_for_response(cls, req_id):
+        """ Wait for a response for a given request ID
 
-        ev_result = req_event.wait(timeout)
+        Note, this method will block the current thread until the response
+        is written or the timeout has occurred.
 
-        if not ev_result:
+        Returns:
+            None
+        """
+        request_info = cls.get_request_info(req_id)
+
+        # Wait for this request's event to be set by a response writer
+        if not request_info['event'].wait(request_info['timeout']):
             # We timed out, write an error to the response
-            cls.write_timeout_error(rsp)
+            cls.write_timeout_error(request_info['rsp'])
 
-        del cls._mappings[id]
-        del cls._locks[id]
+        # We're done with this ID, clean it up from the mappings
+        del cls._mappings[req_id]
 
     @classmethod
-    def get_lock(cls, id):
-        return cls._locks[id]
+    def get_request_info(cls, id):
+        """ Get the request info for a given request ID.
+
+        Returns:
+            info (dict): The saved information about the request
+
+        Raises:
+            ValueError: If the ID is invalid or already timed out
+        """
+        if id not in cls._mappings:
+            raise ValueError("The request ID {} has not been "
+                             "registered or has timed out".format(id))
+
+        return cls._mappings[id]
 
     @classmethod
     def write_timeout_error(cls, rsp):
@@ -79,14 +90,7 @@ class RequestResponseBroker(object):
         Raises:
             ValueError: If the ID is invalid or already timed out
         """
-        # Wait for the ability to acquire the lock before checking for the
-        # request information
-        with cls.get_lock(id):
-            if id not in cls._mappings:
-                raise ValueError("The request ID {} has not been "
-                                "registered or has timed out".format(id))
-
-        request_info = cls._mappings[id]
+        request_info = cls.get_request_info(id)
         rsp = request_info['rsp']
 
         if body:
