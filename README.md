@@ -39,6 +39,7 @@ One signal per request, each with the following attributes
  * **params**: A dictionary containing any URL parameters passed to the request.
  * **headers**: A dictionary containing any request headers included in the request.
  * **body**: For some requests, the payload of the HTTP request
+ * **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned.
 
 
 
@@ -53,6 +54,7 @@ One signal per request, the main (non-hidden) attributes on the notified signal 
  * **_method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with.
  * **_params**: A dictionary containing any URL parameters passed to the request.
  * **_headers**: A dictionary containing any request headers included in the request.
+ * **_user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned.
 
 
 

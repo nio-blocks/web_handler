@@ -4,6 +4,7 @@ from .broker import RequestResponseBroker
 from nio.common.signal.base import Signal
 from nio.modules.web import RESTHandler
 
+from nio.modules.security.user import get_current_user
 
 class Handler(RESTHandler):
 
@@ -63,7 +64,8 @@ class Handler(RESTHandler):
             'id': request_id,
             'method': http_method,
             'params': req_obj.get_params(),
-            'headers': req_obj._headers
+            'headers': req_obj._headers,
+            'user': get_current_user()
         })
 
         if include_body:
@@ -114,7 +116,8 @@ class JSONHandler(Handler):
             '_id': request_id,
             '_method': http_method,
             '_params': req_obj.get_params(),
-            '_headers': req_obj._headers
+            '_headers': req_obj._headers,
+            '_user': get_current_user()
         }
 
         try:
