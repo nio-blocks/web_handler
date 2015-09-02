@@ -23,15 +23,12 @@ class TestWebHandler(NIOBlockTestCase):
             'port': '1234',  # make sure giving a string works too
             'host': 'fakehost'
         })
-
         self.assertEqual(blk.get_timeout_seconds(), 7)
-
         self.assertEqual(blk.configure_server.call_count, 1)
         self.assertEqual(blk.configure_server.call_args[0][0], {
             'host': 'fakehost',
             'port': 1234  # String passed to block, int passed to configure
         })
-
         # TODO: These all return True now, update when support for
         # different methods is available
         self.assertTrue(blk.supports_method('GET'))
@@ -39,3 +36,4 @@ class TestWebHandler(NIOBlockTestCase):
         self.assertTrue(blk.supports_method('PUT'))
         self.assertTrue(blk.supports_method('DELETE'))
         self.assertTrue(blk.supports_method('NOTAMETHOD'))
+        self.assertTrue(blk.supports_method('OPTIONS'))

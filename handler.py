@@ -27,6 +27,10 @@ class Handler(RESTHandler):
     def on_delete(self, req, rsp):
         self.run_request('DELETE', req, rsp, include_body=False)
 
+    def on_options(self, req, rsp):
+        # Don't do anything except simply handle OPTIONS requests for CORS
+        pass
+
     def run_request(self, method, req, rsp, include_body=False):
         """ Record an HTTP request for a given method """
         # Make sure this method is supported by the block
