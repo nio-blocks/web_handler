@@ -1,10 +1,9 @@
 import json
 from uuid import uuid4
 from .broker import RequestResponseBroker
-from nio.common.signal.base import Signal
+from nio.signal.base import Signal
 from nio.modules.web import RESTHandler
 
-from nio.modules.security.user import get_current_user
 
 class Handler(RESTHandler):
 
@@ -13,7 +12,7 @@ class Handler(RESTHandler):
     def __init__(self, endpoint, blk):
         super().__init__('/' + endpoint)
         self._blk = blk
-        self._logger = blk._logger
+        self.logger = blk.logger
 
     def on_get(self, req, rsp):
         self.run_request('GET', req, rsp, include_body=False)
@@ -34,7 +33,7 @@ class Handler(RESTHandler):
     def run_request(self, method, req, rsp, include_body=False):
         """ Record an HTTP request for a given method """
         # Make sure this method is supported by the block
-        self._logger.debug(
+        self.logger.debug(
             "Received {} request, validating method".format(method))
         if not self.validate_method(method, rsp):
             return
@@ -43,19 +42,19 @@ class Handler(RESTHandler):
         request_id = uuid4()
 
         # Register this request with the broker
-        self._logger.debug(
+        self.logger.debug(
             "Registering request with request ID {}".format(request_id))
         RequestResponseBroker.register_request(
             request_id, req, rsp, self._blk.get_timeout_seconds())
 
         # Next, notify the signal containing the request information
-        self._logger.debug(
+        self.logger.debug(
             "Notifiying request signal with request ID {}".format(request_id))
         try:
             self._blk.notify_signals([self.build_output_signal(
                 request_id, req, method, include_body)])
         except:
-            self._logger.exception("Unable to build signal for request")
+            self.logger.exception("Unable to build signal for request")
             raise
 
         # Wait for the response to be written, this call will block until
@@ -69,14 +68,13 @@ class Handler(RESTHandler):
             'method': http_method,
             'params': req_obj.get_params(),
             'headers': req_obj._headers,
-            'user': get_current_user()
         })
 
         if include_body:
             try:
                 setattr(out_sig, 'body', self.get_body_for_signal(req_obj))
             except:
-                self._logger.exception("Unable to get request body")
+                self.logger.exception("Unable to get request body")
                 raise
         return out_sig
 
@@ -115,13 +113,12 @@ class JSONHandler(Handler):
     def build_output_signal(self, request_id, req_obj,
                             http_method, include_body):
         """ For the JSON Handler, return the body as the body of the signal """
-        self._logger.debug("Building output signal")
+        self.logger.debug("Building output signal")
         req_info = {
             '_id': request_id,
             '_method': http_method,
             '_params': req_obj.get_params(),
             '_headers': req_obj._headers,
-            '_user': get_current_user()
         }
 
         try:
@@ -130,7 +127,7 @@ class JSONHandler(Handler):
             else:
                 req_body = {}
         except:
-            self._logger.exception("Unable to get request body")
+            self.logger.exception("Unable to get request body")
             raise
 
         if not isinstance(req_body, dict):

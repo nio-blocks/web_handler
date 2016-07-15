@@ -1,6 +1,6 @@
 from collections import defaultdict
 from unittest.mock import MagicMock
-from nio.util.support.block_test_case import NIOBlockTestCase
+from nio.testing.block_test_case import NIOBlockTestCase
 from ..handler import Handler
 
 

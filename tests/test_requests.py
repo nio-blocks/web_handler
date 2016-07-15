@@ -3,8 +3,8 @@ from collections import defaultdict
 from ..broker import RequestResponseBroker
 from ..web_handler_block import WebHandler
 from ..web_output_block import WebOutput
-from mock import patch
-from nio.util.support.block_test_case import NIOBlockTestCase
+from unittest.mock import patch
+from nio.testing.block_test_case import NIOBlockTestCase
 from nioext.util.support import NIOExtModuleLocations
 from nioext.util.support.provider import NIOExtTestConfigurationProvider
 
