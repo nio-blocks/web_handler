@@ -10,15 +10,15 @@ class TestWebHandler(NIOBlockTestCase):
         """ Adds 'web' and 'security' to default modules """
         return super().get_test_modules() | {'web'}
 
-    @patch("web_handler.web_handler_block.WebEngine")
-    def test_block_api(self, mock_web_engine):
+    def test_block_api(self):
         """ Test that the block provides the correct values for the API """
-        blk = WebHandler()
-        self.configure_block(blk, {
-            'request_timeout': {'seconds': 7},
-            'port': '1234',  # make sure giving a string works too
-            'host': 'fakehost'
-        })
+        with patch(WebHandler.__module__ + ".WebEngine") as mock_web_engine:
+            blk = WebHandler()
+            self.configure_block(blk, {
+                'request_timeout': {'seconds': 7},
+                'port': '1234',  # make sure giving a string works too
+                'host': 'fakehost'
+            })
         self.assertEqual(blk.get_timeout_seconds(), 7)
         self.assertEqual(mock_web_engine.add_server.call_count, 1)
         # String passed to block, int passed to configure
