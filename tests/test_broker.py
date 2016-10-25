@@ -10,6 +10,10 @@ from nio.testing.block_test_case import NIOBlockTestCase
 
 class TestBroker(NIOBlockTestCase):
 
+    def get_test_modules(self):
+        """ Adds 'web' and 'security' to default modules """
+        return super().get_test_modules() | {'web'}
+
     def setUp(self):
         super().setUp()
         RequestResponseBroker._mappings.clear()
@@ -46,7 +50,7 @@ class TestBroker(NIOBlockTestCase):
                 headers={'header_name': 'header_value'})
 
     def get_mocked_request(self):
-        req = Request('', {}, {})
+        req = Request()
         return req
 
     def get_mocked_response(self):
@@ -60,7 +64,8 @@ class TestBroker(NIOBlockTestCase):
         """ Register a request in a new thread and return the ID and resp """
         req_id = uuid4()
         mock_rsp = self.get_mocked_response()
+        mock_req = self.get_mocked_request()
         RequestResponseBroker.register_request(
-            req_id, self.get_mocked_request(), mock_rsp, timeout)
+            req_id, mock_req, mock_rsp, timeout)
         spawn(RequestResponseBroker.wait_for_response, req_id)
         return req_id, mock_rsp
