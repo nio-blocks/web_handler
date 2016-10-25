@@ -34,7 +34,7 @@ class WebHandler(Block):
     def start(self):
         super().start()
         self.logger.debug("Starting server")
-        self._server.start()
+        self._server.start(None)
 
     def stop(self):
         self._server.stop()
