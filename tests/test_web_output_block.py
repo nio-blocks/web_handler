@@ -8,6 +8,10 @@ from nio.testing.block_test_case import NIOBlockTestCase
 
 class TestWebOutput(NIOBlockTestCase):
 
+    def get_test_modules(self):
+        """ Adds 'web' and 'security' to default modules """
+        return super().get_test_modules() | {'web'}
+
     def test_writes_response(self):
         """ Test that the block writes responses, this is the default """
         blk = WebOutput()
