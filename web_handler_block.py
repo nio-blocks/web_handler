@@ -1,13 +1,11 @@
 from .handler import Handler, JSONHandler
 from datetime import timedelta
 from nio.block.base import Block
-from nio.util.discovery import discoverable
 from nio.modules.web import WebEngine
 from nio.properties import StringProperty, IntProperty, \
     VersionProperty, TimeDeltaProperty
 
 
-@discoverable
 class WebHandler(Block):
 
     host = StringProperty(title='Host', default='0.0.0.0', visible=False)
@@ -49,7 +47,6 @@ class WebHandler(Block):
         return True
 
 
-@discoverable
 class WebJSONHandler(WebHandler):
 
     def get_handler(self):

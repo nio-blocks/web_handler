@@ -1,6 +1,5 @@
 import json
 from nio.block.base import Block
-from nio.util.discovery import discoverable
 from nio.properties import VersionProperty, Property, \
     PropertyHolder, ListProperty
 from .broker import RequestResponseBroker
@@ -11,7 +10,6 @@ class ResponseHeader(PropertyHolder):
     header_val = Property(title='Value', default='application/json')
 
 
-@discoverable
 class WebOutput(Block):
 
     version = VersionProperty('1.0.0')
@@ -69,7 +67,6 @@ class WebOutput(Block):
             req_id, body=body, headers=headers, status=status)
 
 
-@discoverable
 class WebJSONOutput(WebOutput):
 
     """ An output block that writes JSON data to the response.
