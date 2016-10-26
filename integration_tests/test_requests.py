@@ -5,8 +5,6 @@ from ..web_handler_block import WebHandler
 from ..web_output_block import WebOutput
 from unittest.mock import patch
 from nio.testing.block_test_case import NIOBlockTestCase
-#from nioext.util.support import NIOExtModuleLocations
-#from nioext.util.support.provider import NIOExtTestConfigurationProvider
 
 
 class TestRequests(NIOBlockTestCase):
