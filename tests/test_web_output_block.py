@@ -1,20 +1,16 @@
-from mock import patch
+from unittest.mock import patch
 from ..broker import RequestResponseBroker
 from collections import defaultdict
 from ..web_output_block import WebOutput
-from nio.common.signal.base import Signal
-from nio.util.support.block_test_case import NIOBlockTestCase
+from nio.signal.base import Signal
+from nio.testing.block_test_case import NIOBlockTestCase
 
 
 class TestWebOutput(NIOBlockTestCase):
 
-    def setUp(self):
-        super().setUp()
-        # This will keep a list of signals notified for each output
-        self.last_notified = defaultdict(list)
-
-    def signals_notified(self, signals, output_id='default'):
-        self.last_notified[output_id].extend(signals)
+    def get_test_modules(self):
+        """ Adds 'web' and 'security' to default modules """
+        return super().get_test_modules() | {'web'}
 
     def test_writes_response(self):
         """ Test that the block writes responses, this is the default """

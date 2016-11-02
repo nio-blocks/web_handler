@@ -4,22 +4,15 @@ from collections import defaultdict
 from ..broker import RequestResponseBroker
 from ..web_handler_block import WebJSONHandler
 from ..web_output_block import WebJSONOutput
-from mock import patch
-from nio.util.support.block_test_case import NIOBlockTestCase
-from nioext.util.support import NIOExtModuleLocations
-from nioext.util.support.provider import NIOExtTestConfigurationProvider
+from unittest.mock import patch
+from nio.testing.block_test_case import NIOBlockTestCase
 
 
 class TestJSONRequests(NIOBlockTestCase):
 
     def get_test_modules(self):
-        return super().get_test_modules() + ['web']
-
-    def get_module_locations(self):
-        return NIOExtModuleLocations
-
-    def get_test_configuration_provider(self):
-        return NIOExtTestConfigurationProvider
+        """ Adds 'web' and 'security' to default modules """
+        return super().get_test_modules() | {'web'}
 
     def setUp(self):
         super().setUp()
