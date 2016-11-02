@@ -1,7 +1,7 @@
 import json
 from nio.block.base import Block
 from nio.properties import VersionProperty, Property, \
-    PropertyHolder, ListProperty
+    PropertyHolder, ListProperty, IntProperty
 from .broker import RequestResponseBroker
 
 
@@ -17,8 +17,8 @@ class WebOutput(Block):
     id_val = Property(title='Request ID', default='{{ $id }}')
 
     response_out = Property(title='Response Body', default='')
-    response_status = Property(
-        title='Response Status', default='200')
+    response_status = IntProperty(
+        title='Response Status', default=200)
     response_headers = ListProperty(ResponseHeader, title='Response Headers',
                                     default=[])
 
@@ -27,7 +27,7 @@ class WebOutput(Block):
             try:
                 req_id = self.id_val(sig)
                 rsp_body = self.build_body(sig)
-                rsp_status = int(self.response_status(sig))
+                rsp_status = self.response_status(sig)
                 rsp_headers = self.build_headers(sig)
             except:
                 self.logger.exception("Unable to build response")
