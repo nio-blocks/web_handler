@@ -1,4 +1,4 @@
-from nio.modules.threading import Event
+from threading import Event
 
 
 class RequestResponseBroker(object):
