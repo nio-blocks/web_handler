@@ -15,23 +15,29 @@ The Output block is intended to respond to the requests made to the Handler bloc
  * [WebOutput](#weboutput) - Basic HTTP response writing
  * [WebJSONOutput](#webjsonoutput) - Automatically sets the `Content-Type: application/json` header and dumps the incoming signal to the response body by default
  
-# WebHandler
+WebHandler
+==========
 
-## Properties
- * **Port** (int): The port to launch the server on. Be sure the port is not already in use
- * **Endpoint** (str): An optional endpoint to launch the server on. The URL that requests should be made to will follow the form `http://<HOST>:<PORT>/<ENDPOINT>`
- * **Max Request Timeout** (timedelta): How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs.
+Properties
+----------
+ * **Port** (type:int): The port to launch the server on. Be sure the port is not already in use
+ * **Endpoint** (type:string): An optional endpoint to launch the server on. The URL that requests should be made to will follow the form `http://<HOST>:<PORT>/<ENDPOINT>`
+ * **Max Request Timeout** (type:timedelta): How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs.
 
-## Dependencies
+Dependencies
+------------
  * [WebServer Mixin](https://github.com/nio-blocks/mixins/tree/master/web_server)
 
-## Commands
+Commands
+--------
 None
 
-## Input
+Input
+-----
 None
 
-## Output
+Output
+------
 One signal per request, each with the following attributes
 
  * **id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.
@@ -41,13 +47,15 @@ One signal per request, each with the following attributes
  * **body**: For some requests, the payload of the HTTP request
  * **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned.
 
+***
 
-
-# WebJSONHandler
+WebJSONHandler
+==============
 
 This block is a subclass of the `WebHandler` block and behaves very similarly. The main difference is that it will JSON parse the incoming request body (on a `POST` or `PUT` call) and put the result on the main part of the signal, rather than nested in the `$body` of the signal. As a result, the attributes on the output signal are somewhat different than on the parent block.
 
-## Output
+Output
+------
 One signal per request, the main (non-hidden) attributes on the notified signal will be the contents of the body of the HTTP request made. The following (hidden) attributes will also be included on the output signal.
 
  * **_id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.
@@ -56,31 +64,40 @@ One signal per request, the main (non-hidden) attributes on the notified signal 
  * **_headers**: A dictionary containing any request headers included in the request.
  * **_user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned.
 
+***
 
-
-# WebOutput
+WebOutput
+=========
 
 This block writes to the response for a given HTTP request made to a WebHandler block
 
-## Properties
- * **Request ID** (expression): The same ID that was returned with the signal notified from the WebHandler block
- * **Response Body** (expression): What the payload of the response should be. This should be a string or bytes, do any serialization in the expression or beforehand.
- * **Response Status** (expression): An integer representing the HTTP status to return. Defaults to 200 (OK)
- * **Response Headers** (list of expressions): A list of key/value pairs representing header names and header values to return in the HTTP response headers.
+Properties
+----------
+ * **Request ID** (type:expression): The same ID that was returned with the signal notified from the WebHandler block
+ * **Response Body** (type:expression): What the payload of the response should be. This should be a string or bytes, do any serialization in the expression or beforehand.
+ * **Response Status** (type:expression): An integer representing the HTTP status to return. Defaults to 200 (type:OK)
+ * **Response Headers** (type:list of expressions): A list of key/value pairs representing header names and header values to return in the HTTP response headers.
 
-## Dependencies
+Dependencies
+------------
 None
 
-## Commands
+Commands
+--------
 None
 
-## Input
+Input
+-----
 Any list of signals
 
-## Output
+Output
+------
 None
 
-# WebJSONOutput
+***
+
+WebJSONOutput
+=============
 
 This block is a subclass of the `WebOutput` block and behaves very similarly. This block is mainly intended for use in conjunction with the `WebJSONHandler` block as the Handler block of the service. It can be configured to behave *exactly* the same as the `WebOutput` block but has some shortcuts and common configuration built in by default.
 
