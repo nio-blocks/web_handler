@@ -1,80 +1,34 @@
 {
-    "nio/WebJSONHandler": {
-        "Output": {
-            "Description": "One signal per request, the main (non-hidden) attributes on the notified signal will be the contents of the body of the HTTP request made. The following (hidden) attributes will also be included on the output signal.\n* **_id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.\n* **_method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with.\n* **_params**: A dictionary containing any URL parameters passed to the request.\n* **_headers**: A dictionary containing any request headers included in the request.\n* **_user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned."
-        },
-        "Description": "This block is a subclass of the `WebHandler` block and behaves very similarly. The main difference is that it will JSON parse the incoming request body (on a `POST` or `PUT` call) and put the result on the main part of the signal, rather than nested in the `$body` of the signal. As a result, the attributes on the output signal are somewhat different than on the parent block.",
-        "Category": "WebService",
-        "Input": {
-            "Description": {}
-        },
-        "Version": "1.0.0"
-    },
-    "nio/WebHandler": {
-        "Properties": {
-            "Endpoint": {
-                "type": "string",
-                "description": "An optional endpoint to launch the server on. The URL that requests should be made to will follow the form `http://<HOST>:<PORT>/<ENDPOINT>`"
-            },
-            "Max Request Timeout": {
-                "type": "timedelta",
-                "description": "How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs."
-            },
-            "Port": {
-                "type": "int",
-                "description": "The port to launch the server on. Be sure the port is not already in use"
-            }
-        },
-        "Input": {
-            "Description": "None"
-        },
-        "Commands": {},
-        "Version": "1.0.0",
-        "Output": {
-            "Description": "One signal per request, each with the following attributes\n* **id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.\n* **method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with.\n* **params**: A dictionary containing any URL parameters passed to the request.\n* **headers**: A dictionary containing any request headers included in the request.\n* **body**: For some requests, the payload of the HTTP request\n* **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned."
-        },
-        "Description": "",
-        "Category": "WebService"
-    },
-    "nio/WebJSONOutput": {
-        "Output": {
-            "Description": "None\nWebJSONOutput"
-        },
-        "Description": "This block is a subclass of the `WebOutput` block and behaves very similarly. This block is mainly intended for use in conjunction with the `WebJSONHandler` block as the Handler block of the service. It can be configured to behave *exactly* the same as the `WebOutput` block but has some shortcuts and common configuration built in by default.\nMainly, it will automatically add the `Content-Type: application/json` header to the response headers. This can be overridden by adding a different `Content-Type` header in the block config.\nThe block also has a convenient default for the `Response Body` config which will write the non-hidden attributes of the signal to the response.\nThis block, along with the `WebJSONHandler` block, should be used if you find yourself having to dive into the `$body` of the standard request signal more often that you would like. It is also useful for building a response object through DynamicFields or similar blocks.",
-        "Category": "WebService",
-        "Input": {
-            "Description": {}
-        },
-        "Version": "1.0.0"
-    },
-    "nio/WebOutput": {
-        "Properties": {
-            "Response Body": {
-                "type": "expression",
-                "description": "What the payload of the response should be. This should be a string or bytes, do any serialization in the expression or beforehand."
-            },
-            "Request ID": {
-                "type": "expression",
-                "description": "The same ID that was returned with the signal notified from the WebHandler block"
-            },
-            "Response Headers": {
-                "type": "list of expressions",
-                "description": "A list of key/value pairs representing header names and header values to return in the HTTP response headers."
-            },
-            "Response Status": {
-                "type": "expression",
-                "description": "An integer representing the HTTP status to return. Defaults to 200 (type:OK)"
-            }
-        },
-        "Input": {
-            "Description": "Any list of signals"
-        },
-        "Version": "1.0.0",
-        "Category": "WebService",
-        "Output": {
-            "Description": "None"
-        },
-        "Description": "This block writes to the response for a given HTTP request made to a WebHandler block",
-        "Commands": {}
-    }
+  "nio/WebHandler": {
+    "version": "0.0.1",
+    "description": "",
+    "inputs": {},
+    "outputs": {},
+    "properties": {},
+    "commands": {}
+  },
+  "nio/WebJSONHandler": {
+    "version": "0.0.1",
+    "description": "",
+    "inputs": {},
+    "outputs": {},
+    "properties": {},
+    "commands": {}
+  },
+  "nio/WebJSONOutput": {
+    "version": "0.0.1",
+    "description": "",
+    "inputs": {},
+    "outputs": {},
+    "properties": {},
+    "commands": {}
+  },
+  "nio/WebOutput": {
+    "version": "0.0.1",
+    "description": "",
+    "inputs": {},
+    "outputs": {},
+    "properties": {},
+    "commands": {}
+  }
 }
