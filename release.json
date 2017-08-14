@@ -1,22 +1,22 @@
 {
   "nio/WebHandler": {
     "language": "Python",
-    "version": "0.0.1",
-    "reference": "github.com/nio-blocks/web_handler.git@v0.0.1"
+    "url": "git://github.com/nio-blocks/web_handler.git",
+    "version": "1.0.0"
   },
   "nio/WebJSONHandler": {
     "language": "Python",
-    "version": "0.0.1",
-    "reference": "github.com/nio-blocks/web_handler.git@v0.0.1"
+    "url": "git://github.com/nio-blocks/web_handler.git",
+    "version": "1.0.0"
   },
   "nio/WebJSONOutput": {
     "language": "Python",
-    "version": "0.0.1",
-    "reference": "github.com/nio-blocks/web_handler.git@v0.0.1"
+    "url": "git://github.com/nio-blocks/web_handler.git",
+    "version": "1.0.0"
   },
   "nio/WebOutput": {
     "language": "Python",
-    "version": "0.0.1",
-    "reference": "github.com/nio-blocks/web_handler.git@v0.0.1"
+    "url": "git://github.com/nio-blocks/web_handler.git",
+    "version": "1.0.0"
   }
 }

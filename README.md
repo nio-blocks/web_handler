@@ -26,7 +26,6 @@ Properties
 
 Dependencies
 ------------
- * [WebServer Mixin](https://github.com/nio-blocks/mixins/tree/master/web_server)
 
 Commands
 --------

@@ -1,11 +1,14 @@
 from unittest.mock import MagicMock
-from ..broker import RequestResponseBroker
+
 from uuid import uuid4
 from time import sleep
+
 from nio.util.threading.spawn import spawn
 from nio.modules.web.request import Request
 from nio.modules.web.response import Response
 from nio.testing.block_test_case import NIOBlockTestCase
+
+from ..broker import RequestResponseBroker
 
 
 class TestBroker(NIOBlockTestCase):

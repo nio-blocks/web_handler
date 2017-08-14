@@ -1,7 +1,9 @@
 import json
+
 from nio.block.base import Block
 from nio.properties import VersionProperty, Property, \
     PropertyHolder, ListProperty, IntProperty
+
 from .broker import RequestResponseBroker
 
 
@@ -13,9 +15,7 @@ class ResponseHeader(PropertyHolder):
 class WebOutput(Block):
 
     version = VersionProperty('1.0.0')
-
     id_val = Property(title='Request ID', default='{{ $id }}')
-
     response_out = Property(title='Response Body', default='')
     response_status = IntProperty(
         title='Response Status', default=200)
@@ -81,6 +81,7 @@ class WebJSONOutput(WebOutput):
     response_out = Property(
         title='Response Body',
         default='{{ json.dumps($to_dict(), default=str) }}')
+    version = VersionProperty("1.0.0")
 
     def build_body(self, signal):
         resp_obj = self.response_out(signal)
