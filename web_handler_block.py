@@ -1,5 +1,5 @@
 from .handler import Handler, JSONHandler
-from datetime import timedelta
+
 from nio.block.base import Block
 from nio.modules.web import WebEngine
 from nio.properties import StringProperty, IntProperty, \
@@ -11,10 +11,9 @@ class WebHandler(Block):
     host = StringProperty(title='Host', default='0.0.0.0', visible=False)
     port = IntProperty(title='Port', default=8182)
     endpoint = StringProperty(title='Endpoint', default='')
-
     request_timeout = TimeDeltaProperty(
-        title='Max Request Timeout', default=timedelta(seconds=10))
-
+        title='Max Request Timeout', default={'days': 0, 'seconds': 10,
+                                              'microseconds': 0})
     version = VersionProperty('1.0.0')
 
     def configure(self, context):
@@ -48,6 +47,8 @@ class WebHandler(Block):
 
 
 class WebJSONHandler(WebHandler):
+
+    version = VersionProperty("1.0.0")
 
     def get_handler(self):
         return JSONHandler(self.endpoint(), self)
