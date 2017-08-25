@@ -1,6 +1,6 @@
 import json
 
-from nio.block.base import Block
+from nio import TerminatorBlock
 from nio.properties import VersionProperty, Property, \
     PropertyHolder, ListProperty, IntProperty
 
@@ -12,7 +12,7 @@ class ResponseHeader(PropertyHolder):
     header_val = Property(title='Value', default='application/json')
 
 
-class WebOutput(Block):
+class WebOutput(TerminatorBlock):
 
     version = VersionProperty('1.0.0')
     id_val = Property(title='Request ID', default='{{ $id }}')
