@@ -1,12 +1,12 @@
 from .handler import Handler, JSONHandler
 
-from nio.block.base import Block
+from nio import GeneratorBlock
 from nio.modules.web import WebEngine
 from nio.properties import StringProperty, IntProperty, \
     VersionProperty, TimeDeltaProperty
 
 
-class WebHandler(Block):
+class WebHandler(GeneratorBlock):
 
     host = StringProperty(title='Host', default='0.0.0.0', visible=False)
     port = IntProperty(title='Port', default=8182)
