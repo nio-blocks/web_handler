@@ -2,6 +2,9 @@
   "nio/WebHandler": {
     "version": "1.0.0",
     "description": "Launches an HTTP server on the specified port and notifies signals when requests are made to that server.",
+    "categories": [
+      "Communication"
+    ],
     "properties": {
       "endpoint": {
         "title": "Endpoint",
@@ -43,6 +46,9 @@
   "nio/WebJSONHandler": {
     "version": "1.0.0",
     "description": "This block is a subclass of the `WebHandler` block and behaves very similarly. The main difference is that it will JSON parse the incoming request body (on a `POST` or `PUT` call) and put the result on the main part of the signal, rather than nested in the `$body` of the signal. As a result, the attributes on the output signal are somewhat different than on the parent block.",
+    "categories": [
+      "Communication"
+    ],
     "properties": {
       "endpoint": {
         "title": "Endpoint",
@@ -84,6 +90,9 @@
   "nio/WebJSONOutput": {
     "version": "1.0.0",
     "description": "This block is a subclass of the `WebOutput` block and behaves very similarly. This block is mainly intended for use in conjunction with the `WebJSONHandler` block as the Handler block of the service. It can be configured to behave *exactly* the same as the `WebOutput` block but has some shortcuts and common configuration built in by default. Mainly, it will automatically add the `Content-Type: application/json` header to the response headers. This can be overridden by adding a different `Content-Type` header in the block config. The block also has a convenient default for the `Response Body` config which will write the non-hidden attributes of the signal to the response. This block, along with the `WebJSONHandler` block, should be used if you find yourself having to dive into the `$body` of the standard request signal more often that you would like. It is also useful for building a response object through DynamicFields or similar blocks.",
+    "categories": [
+      "Communication"
+    ],
     "properties": {
       "id_val": {
         "title": "Request ID",
@@ -117,6 +126,9 @@
   "nio/WebOutput": {
     "version": "1.0.0",
     "description": "This block writes to the response for a given HTTP request made to a WebHandler block",
+    "categories": [
+      "Communication"
+    ],
     "properties": {
       "id_val": {
         "title": "Request ID",
