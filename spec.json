@@ -1,11 +1,17 @@
 {
   "nio/WebHandler": {
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Launches an HTTP server on the specified port and notifies signals when requests are made to that server.",
     "categories": [
       "Communication"
     ],
     "properties": {
+      "auth": {
+        "title": "Require Authentication",
+        "type": "BoolType",
+        "description": "If checked (true) incoming requests must include an Authorization header.",
+        "default": true
+      },
       "endpoint": {
         "title": "Endpoint",
         "type": "StringType",
@@ -30,8 +36,8 @@
         "description": "How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs.",
         "default": {
           "days": 0,
-          "microseconds": 0,
-          "seconds": 10
+          "seconds": 10,
+          "microseconds": 0
         }
       },
       "ssl_cert": {
@@ -56,7 +62,7 @@
     "inputs": {},
     "outputs": {
       "default": {
-        "description": "One signal per request, each with the following attributes: * **id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block. * **method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with. * **params**: A dictionary containing any URL parameters passed to the request. * **headers**: A dictionary containing any request headers included in the request. * **body**: For some requests, the payload of the HTTP request * **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorizati on` header. If no authorization information is provided, the Guest user will probably be returned."
+        "description": "One signal per request, each with the following attributes: * **id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block. * **method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with. * **params**: A dictionary containing any URL parameters passed to the request. * **headers**: A dictionary containing any request headers included in the request. * **body**: For some requests, the payload of the HTTP request. * **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorizati on` header. If no authorization information is provided, the Guest user will probably be returned."
       }
     },
     "commands": {}
@@ -68,6 +74,12 @@
       "Communication"
     ],
     "properties": {
+      "auth": {
+        "title": "Require Authentication",
+        "type": "BoolType",
+        "description": "If checked (true) incoming requests must include an Authorization header.",
+        "default": true
+      },
       "endpoint": {
         "title": "Endpoint",
         "type": "StringType",
@@ -92,8 +104,8 @@
         "description": "How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs.",
         "default": {
           "days": 0,
-          "microseconds": 0,
-          "seconds": 10
+          "seconds": 10,
+          "microseconds": 0
         }
       },
       "ssl_cert": {

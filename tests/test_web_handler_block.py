@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 from collections import defaultdict
 from ..web_handler_block import WebHandler
+from ..handler import Handler
 from nio.testing.block_test_case import NIOBlockTestCase
 
 
@@ -33,3 +34,12 @@ class TestWebHandler(NIOBlockTestCase):
         self.assertTrue(blk.supports_method('DELETE'))
         self.assertTrue(blk.supports_method('NOTAMETHOD'))
         self.assertTrue(blk.supports_method('OPTIONS'))
+
+    def test_override_auth(self):
+        """ Optionally disable authentication """
+        with patch(WebHandler.__module__ + ".WebEngine") as mock_web_engine:
+            blk = WebHandler()
+            self.configure_block(blk, {
+                'auth': False
+            })
+        self.assertEqual(Handler.before_handler, blk._no_auth)
