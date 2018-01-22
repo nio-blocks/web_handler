@@ -3,7 +3,7 @@ from .handler import Handler, JSONHandler
 from nio import GeneratorBlock
 from nio.modules.web import WebEngine
 from nio.properties import StringProperty, IntProperty, \
-    VersionProperty, TimeDeltaProperty
+    VersionProperty, TimeDeltaProperty, BoolProperty
 
 
 class WebHandler(GeneratorBlock):
@@ -16,9 +16,24 @@ class WebHandler(GeneratorBlock):
                                               'microseconds': 0})
     version = VersionProperty('1.0.0')
 
+    ssl_enable = BoolProperty(title='Secure Sockets Layer (SSL) Enabled',
+                              default=False)
+    ssl_cert = StringProperty(title='SSL Certificate File',
+                              default='', allow_none=True)
+    ssl_key = StringProperty(title='SSL Private Key File',
+                             default='', allow_none=True)
+
     def configure(self, context):
         super().configure(context)
-        self._server = WebEngine.add_server(self.port(), self.host(), {})
+        config = {}
+        if self.ssl_enable():
+            self.logger.debug('Applying SSL certificate and private key')
+            config = {
+                'ssl_certificate': self.ssl_cert(),
+                'ssl_private_key': self.ssl_key()
+            }
+
+        self._server = WebEngine.add_server(self.port(), self.host(), config)
         self._server.add_handler(self.get_handler())
 
     def get_handler(self):
