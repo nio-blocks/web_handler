@@ -18,7 +18,13 @@ None
 
 Outputs
 -------
-- **default**: One signal per request, each with the following attributes: * **id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block. * **method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with. * **params**: A dictionary containing any URL parameters passed to the request. * **headers**: A dictionary containing any request headers included in the request. * **body**: For some requests, the payload of the HTTP request * **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorizati on` header. If no authorization information is provided, the Guest user will probably be returned.
+- **default**: One signal per request, each with the following attributes: 
+* **id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block. 
+* **method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with. 
+* **params**: A dictionary containing any URL parameters passed to the request. 
+* **headers**: A dictionary containing any request headers included in the request. 
+* **body**: For some requests, the payload of the HTTP request 
+* **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorizati on` header. If no authorization information is provided, the Guest user will probably be returned.
 
 Commands
 --------
@@ -59,22 +65,18 @@ Inputs
 ------
 None
 
-Outputs
--------
-- **default**: One signal per request, the main (non-hidden) attributes on the notified signal will be the contents of the body of the HTTP request made. The following (hidden) attributes will also be included on the output signal. * **_id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block. * **_method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with. * **_params**: A dictionary containing any URL parameters passed to the request. * **_headers**: A dictionary containing any request headers included in the request. * **_user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned.
-
 Commands
 --------
 None
 
 Output
 ------
-One signal per request, the main (non-hidden) attributes on the notified signal will be the contents of the body of the HTTP request made. The following (hidden) attributes will also be included on the output signal.
- * **_id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.
- * **_method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with.
- * **_params**: A dictionary containing any URL parameters passed to the request.
- * **_headers**: A dictionary containing any request headers included in the request.
- * **_user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned.
+One signal per request, the main (non-hidden) attributes on the notified signal will be the contents of the body of the HTTP request made. The following (hidden) attributes will also be included on the output signal.  
+* **_id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.  
+* **_method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with.  
+* **_params**: A dictionary containing any URL parameters passed to the request.  
+* **_headers**: A dictionary containing any request headers included in the request.  
+* **_user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned. 
 
 WebJSONOutput
 =============
