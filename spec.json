@@ -164,7 +164,7 @@
     "commands": {}
   },
   "nio/WebOutput": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "This block writes to the response for a given HTTP request made to a WebHandler block",
     "categories": [
       "Communication"
