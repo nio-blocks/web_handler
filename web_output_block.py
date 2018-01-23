@@ -14,7 +14,7 @@ class ResponseHeader(PropertyHolder):
 
 class WebOutput(TerminatorBlock):
 
-    version = VersionProperty('1.0.0')
+    version = VersionProperty("1.0.1")
     id_val = Property(title='Request ID', default='{{ $id }}')
     response_out = Property(title='Response Body', default='')
     response_status = IntProperty(
@@ -81,7 +81,7 @@ class WebJSONOutput(WebOutput):
     response_out = Property(
         title='Response Body',
         default='{{ json.dumps($to_dict(), default=str) }}')
-    version = VersionProperty("1.0.0")
+    version = VersionProperty("1.0.1")
 
     def build_body(self, signal):
         resp_obj = self.response_out(signal)
