@@ -1,6 +1,6 @@
 {
   "nio/WebHandler": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Launches an HTTP server on the specified port and notifies signals when requests are made to that server.",
     "categories": [
       "Communication"

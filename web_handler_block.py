@@ -14,7 +14,7 @@ class WebHandler(GeneratorBlock):
     request_timeout = TimeDeltaProperty(
         title='Max Request Timeout', default={'days': 0, 'seconds': 10,
                                               'microseconds': 0})
-    version = VersionProperty('1.0.0')
+    version = VersionProperty("1.0.1")
 
     ssl_enable = BoolProperty(title='Secure Sockets Layer (SSL) Enabled',
                               default=False)
@@ -63,7 +63,7 @@ class WebHandler(GeneratorBlock):
 
 class WebJSONHandler(WebHandler):
 
-    version = VersionProperty("1.0.0")
+    version = VersionProperty("1.0.1")
 
     def get_handler(self):
         return JSONHandler(self.endpoint(), self)
