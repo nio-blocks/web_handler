@@ -33,20 +33,6 @@ None
 Dependencies
 ------------
 
-Input
------
-None
-
-Output
-------
-One signal per request, each with the following attributes
- * **id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.
- * **method**: The HTTP method (i.e. `GET`, `POST`, etc) that the request was made with.
- * **params**: A dictionary containing any URL parameters passed to the request.
- * **headers**: A dictionary containing any request headers included in the request.
- * **body**: For some requests, the payload of the HTTP request
- * **user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned.
-
 WebJSONHandler
 ==============
 This block is a subclass of the `WebHandler` block and behaves very similarly. The main difference is that it will JSON parse the incoming request body (on a `POST` or `PUT` call) and put the result on the main part of the signal, rather than nested in the `$body` of the signal. As a result, the attributes on the output signal are somewhat different than on the parent block.
@@ -69,7 +55,7 @@ Commands
 --------
 None
 
-Output
+Outputs
 ------
 One signal per request, the main (non-hidden) attributes on the notified signal will be the contents of the body of the HTTP request made. The following (hidden) attributes will also be included on the output signal.  
 * **_id**: The unique request ID for this request. This value must carry along with the signal to the WebOutput block.  
@@ -77,6 +63,13 @@ One signal per request, the main (non-hidden) attributes on the notified signal 
 * **_params**: A dictionary containing any URL parameters passed to the request.  
 * **_headers**: A dictionary containing any request headers included in the request.  
 * **_user**: The User (nio.modules.security.user.User) object of the user who made the HTTP request. This is determined based on the `Authorization` header. If no authorization information is provided, the Guest user will probably be returned. 
+
+Commands
+--------
+None
+
+Dependencies
+------------
 
 WebJSONOutput
 =============
@@ -100,6 +93,9 @@ None
 Commands
 --------
 None
+
+Dependencies
+------------
 
 WebOutput
 =========
@@ -127,12 +123,3 @@ None
 Dependencies
 ------------
 None
-
-Input
------
-Any list of signals
-
-Output
-------
-None
-
