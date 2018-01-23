@@ -29,10 +29,28 @@
         "type": "TimeDeltaType",
         "description": "How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs.",
         "default": {
-          "seconds": 10,
           "days": 0,
-          "microseconds": 0
+          "microseconds": 0,
+          "seconds": 10
         }
+      },
+      "ssl_cert": {
+        "title": "SSL Certificate File",
+        "type": "StringType",
+        "description": "Location of the SSL certificate file to apply to the web server",
+        "default": ""
+      },
+      "ssl_enable": {
+        "title": "Secure Sockets Layer (SSL) Enabled",
+        "type": "BoolType",
+        "description": "Enables the optional SSL security for the web handler endpoint",
+        "default": false
+      },
+      "ssl_key": {
+        "title": "SSL Private Key File",
+        "type": "StringType",
+        "description": "Location of the SSL private key file to apply to the web server",
+        "default": ""
       }
     },
     "inputs": {},
@@ -73,10 +91,28 @@
         "type": "TimeDeltaType",
         "description": "How long to give the service to respond to the request. If a corresponding WebOutput block does not write to the response for the incoming request in the specified time, a 504 Gateway Timed Out error will be returned to the caller. This is important to include in case an error in the service occurs.",
         "default": {
-          "seconds": 10,
           "days": 0,
-          "microseconds": 0
+          "microseconds": 0,
+          "seconds": 10
         }
+      },
+      "ssl_cert": {
+        "title": "SSL Certificate File",
+        "type": "StringType",
+        "description": "Location of the SSL certificate file to apply to the web server",
+        "default": ""
+      },
+      "ssl_enable": {
+        "title": "Secure Sockets Layer (SSL) Enabled",
+        "type": "BoolType",
+        "description": "Enables the optional SSL security for the web handler endpoint",
+        "default": false
+      },
+      "ssl_key": {
+        "title": "SSL Private Key File",
+        "type": "StringType",
+        "description": "Location of the SSL private key file to apply to the web server",
+        "default": ""
       }
     },
     "inputs": {},
@@ -119,7 +155,11 @@
         "default": 200
       }
     },
-    "inputs": {},
+    "inputs": {
+      "default": {
+        "description": ""
+      }
+    },
     "outputs": {},
     "commands": {}
   },
