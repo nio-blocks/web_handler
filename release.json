@@ -7,7 +7,7 @@
   "nio/WebJSONHandler": {
     "language": "Python",
     "url": "git://github.com/nio-blocks/web_handler.git",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "nio/WebJSONOutput": {
     "language": "Python",

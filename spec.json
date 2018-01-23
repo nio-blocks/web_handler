@@ -62,7 +62,7 @@
     "commands": {}
   },
   "nio/WebJSONHandler": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "This block is a subclass of the `WebHandler` block and behaves very similarly. The main difference is that it will JSON parse the incoming request body (on a `POST` or `PUT` call) and put the result on the main part of the signal, rather than nested in the `$body` of the signal. As a result, the attributes on the output signal are somewhat different than on the parent block.",
     "categories": [
       "Communication"
