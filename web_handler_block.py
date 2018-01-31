@@ -22,6 +22,8 @@ class WebHandler(GeneratorBlock):
                               default='', allow_none=True)
     ssl_key = StringProperty(title='SSL Private Key File',
                              default='', allow_none=True)
+    permission_resource = StringProperty(title='Permission Resource')
+    permission_action = StringProperty(title='Permission Action')
 
     def configure(self, context):
         super().configure(context)
@@ -37,7 +39,10 @@ class WebHandler(GeneratorBlock):
         self._server.add_handler(self.get_handler())
 
     def get_handler(self):
-        return Handler(self.endpoint(), self)
+        permissions = None
+        if self.permission_action() and self.permission_resource():
+            permissions = (self.permission_resource(), self.permission_action())
+        return Handler(self.endpoint(), self, permissions)
 
     def __init__(self):
         super().__init__()

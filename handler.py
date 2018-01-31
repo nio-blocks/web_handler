@@ -3,16 +3,25 @@ from uuid import uuid4
 from .broker import RequestResponseBroker
 from nio.signal.base import Signal
 from nio.modules.web import RESTHandler
+from nio.modules.security.access import get_user
+from nio.modules.security import Authorizer, SecureTask
 
 
 class Handler(RESTHandler):
 
     """ A REST Handler that will listen for HTTP requests and register them """
 
-    def __init__(self, endpoint, blk):
+    def __init__(self, endpoint, blk, permission_required=None):
         super().__init__('/' + endpoint)
         self._blk = blk
         self.logger = blk.logger
+        self.permission_required = permission_required
+
+    def before_handler(self, request, response):
+        super().before_handler(request, response)
+        Authorizer.authorize(
+            get_user(),
+            SecureTask(*self.permission_required))
 
     def on_get(self, req, rsp):
         self.run_request('GET', req, rsp, include_body=False)
