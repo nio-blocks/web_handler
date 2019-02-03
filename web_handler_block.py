@@ -3,8 +3,28 @@ from .handler import Handler, JSONHandler
 from nio import GeneratorBlock
 from nio.modules.web import WebEngine
 from nio.properties import StringProperty, IntProperty, VersionProperty, \
-                           TimeDeltaProperty, BoolProperty
+                           ObjectProperty, TimeDeltaProperty, BoolProperty, \
+                           PropertyHolder
 
+class CORS(PropertyHolder):
+    allow_origin = StringProperty(title='Access-Control-Allow-Origin',
+                                  default='*',
+                                  allow_none=True)
+    allow_credentials = StringProperty(title='Access-Control-Allow-Credentials',
+                                  default='true',
+                                  allow_none=True)
+    max_age = StringProperty(title='Access-Control-Max-Age',
+                                  default=None,
+                                  allow_none=True)
+    expose_headers = StringProperty(title='Access-Control-Expose-Headers',
+                                  default=None,
+                                  allow_none=True)
+    allow_methods = StringProperty(title='Access-Control-Allow-Methods',
+                                  default='GET,POST,PUT,DELETE,OPTIONS',
+                                  allow_none=True)
+    allow_headers = StringProperty(title='Access-Control-Allow-Headers',
+                                  default='Accept, Origin, Content-Type, Authorization',
+                                  allow_none=True)
 
 class WebHandler(GeneratorBlock):
 
@@ -26,6 +46,11 @@ class WebHandler(GeneratorBlock):
                              default='',
                              allow_none=True)
 
+    cors = ObjectProperty(CORS,
+                          title="Access-Control Headers",
+                          default=dict(),
+                          advanced=True)
+
     def configure(self, context):
         super().configure(context)
         config = {}
@@ -42,7 +67,7 @@ class WebHandler(GeneratorBlock):
         self._server.add_handler(self.get_handler())
 
     def get_handler(self):
-        return Handler(self.endpoint(), self)
+        return Handler(self.endpoint(), self.cors(), self)
 
     def __init__(self):
         super().__init__()
