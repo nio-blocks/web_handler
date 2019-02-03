@@ -16,15 +16,19 @@ class Handler(RESTHandler):
         self.logger = blk.logger
 
     def on_get(self, req, rsp):
+        self.__add_cors(rsp)
         self.run_request('GET', req, rsp, include_body=False)
 
     def on_post(self, req, rsp):
+        self.__add_cors(rsp)
         self.run_request('POST', req, rsp, include_body=True)
 
     def on_put(self, req, rsp):
+        self.__add_cors(rsp)
         self.run_request('PUT', req, rsp, include_body=True)
 
     def on_delete(self, req, rsp):
+        self.__add_cors(rsp)
         self.run_request('DELETE', req, rsp, include_body=False)
 
     def on_options(self, req, rsp):
