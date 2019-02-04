@@ -76,22 +76,22 @@ class WebHandler(GeneratorBlock):
 
         headers = dict()
 
-        if allow_origin is not None:
+        if allow_origin:
             headers["Access-Control-Allow-Origin"] = allow_origin
 
-        if allow_credentials is not None:
+        if allow_credentials:
             headers["Access-Control-Allow-Credentials"] = allow_credentials
 
-        if max_age is not None:
+        if max_age:
             headers["Access-Control-Max-Age"] = max_age
 
-        if expose_headers is not None:
+        if expose_headers:
             headers["Access-Control-Expose-Headers"] = expose_headers
 
-        if allow_methods is not None:
+        if allow_methods:
             headers["Access-Control-Allow-Methods"] = allow_methods
 
-        if allow_headers is not None:
+        if allow_headers:
             headers["Access-Control-Allow-Headers"] = allow_headers
 
         return Handler(self.endpoint(), blk=self, headers=headers)
