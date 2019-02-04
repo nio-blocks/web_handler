@@ -8,10 +8,10 @@ from nio.properties import StringProperty, IntProperty, VersionProperty, \
 
 class CORS(PropertyHolder):
     allow_origin = StringProperty(title='Access-Control-Allow-Origin',
-                                  default='*',
+                                  default=None,
                                   allow_none=True)
     allow_credentials = StringProperty(title='Access-Control-Allow-Credentials',
-                                  default='true',
+                                  default=None,
                                   allow_none=True)
     max_age = StringProperty(title='Access-Control-Max-Age',
                                   default=None,
@@ -20,10 +20,10 @@ class CORS(PropertyHolder):
                                   default=None,
                                   allow_none=True)
     allow_methods = StringProperty(title='Access-Control-Allow-Methods',
-                                  default='GET,POST,PUT,DELETE,OPTIONS',
+                                  default=None,
                                   allow_none=True)
     allow_headers = StringProperty(title='Access-Control-Allow-Headers',
-                                  default='Accept, Origin, Content-Type, Authorization',
+                                  default=None,
                                   allow_none=True)
 
 class WebHandler(GeneratorBlock):
