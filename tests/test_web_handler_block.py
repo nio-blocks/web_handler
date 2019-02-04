@@ -43,3 +43,31 @@ class TestWebHandler(NIOBlockTestCase):
                 'auth': False
             })
         self.assertEqual(Handler.before_handler, blk._no_auth)
+
+    @patch(WebHandler.__module__ + ".WebEngine")
+    @patch(WebHandler.__module__ + ".Handler")
+    def test_adding_cors_headers(self, MockHandler, MockWebHandler):
+        """ Test that the block adds CORS headers as defined in block config"""
+        blk = WebHandler()
+        self.configure_block(blk, {
+            'cors': {
+                'allow_origin': 'http://app.local',
+                'allow_headers': 'Nio-Header, App-Header'
+            }
+        })
+        self.assertEqual(MockHandler.call_count, 1)
+        args, kwargs = MockHandler.call_args
+        self.assertEqual(kwargs['headers'], {
+            'Access-Control-Allow-Origin': 'http://app.local',
+            'Access-Control-Allow-Headers': 'Nio-Header, App-Header'
+        })
+
+    @patch(WebHandler.__module__ + ".WebEngine")
+    @patch(WebHandler.__module__ + ".Handler")
+    def test_no_cors_headers(self, MockHandler, MockWebHandler):
+        """ Test that the block addsno  CORS headers if empty"""
+        blk = WebHandler()
+        self.configure_block(blk, {})
+        self.assertEqual(MockHandler.call_count, 1)
+        args, kwargs = MockHandler.call_args
+        self.assertEqual(kwargs['headers'], {})
