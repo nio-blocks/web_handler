@@ -48,7 +48,7 @@ class WebHandler(GeneratorBlock):
 
     cors = ObjectProperty(CORS,
                           title="Access-Control Headers",
-                          default=dict(),
+                          default=CORS(),
                           advanced=True)
 
     def configure(self, context):
