@@ -9,30 +9,30 @@ class Handler(RESTHandler):
 
     """ A REST Handler that will listen for HTTP requests and register them """
 
-    def __init__(self, endpoint, cors, blk):
+    def __init__(self, endpoint, blk, headers=None):
         super().__init__('/' + endpoint)
         self._blk = blk
-        self._cors = cors
         self.logger = blk.logger
+        self._headers = headers
 
     def on_get(self, req, rsp):
-        self.__add_cors(rsp)
+        self.__add_headers(rsp)
         self.run_request('GET', req, rsp, include_body=False)
 
     def on_post(self, req, rsp):
-        self.__add_cors(rsp)
+        self.__add_headers(rsp)
         self.run_request('POST', req, rsp, include_body=True)
 
     def on_put(self, req, rsp):
-        self.__add_cors(rsp)
+        self.__add_headers(rsp)
         self.run_request('PUT', req, rsp, include_body=True)
 
     def on_delete(self, req, rsp):
-        self.__add_cors(rsp)
+        self.__add_headers(rsp)
         self.run_request('DELETE', req, rsp, include_body=False)
 
     def on_options(self, req, rsp):
-        self.__add_cors(rsp)
+        self.__add_headers(rsp)
 
     def run_request(self, method, req, rsp, include_body=False):
         """ Record an HTTP request for a given method """
@@ -100,31 +100,10 @@ class Handler(RESTHandler):
         rsp.set_status(501)
         return False
 
-    def __add_cors(self, rsp):
-        allow_origin = self._cors.allow_origin()
-        if allow_origin is not None:
-            rsp.set_header("Access-Control-Allow-Origin", allow_origin)
-
-        allow_credentials = self._cors.allow_credentials()
-        if allow_credentials is not None:
-            rsp.set_header("Access-Control-Allow-Credentials", allow_credentials)
-
-        max_age = self._cors.max_age()
-        if max_age is not None:
-            rsp.set_header("Access-Control-Max-Age", max_age)
-
-        expose_headers = self._cors.expose_headers()
-        if expose_headers is not None:
-            rsp.set_header("Access-Control-Expose-Headers", expose_headers)
-
-        allow_methods = self._cors.allow_methods()
-        if allow_methods is not None:
-            rsp.set_header("Access-Control-Allow-Methods", allow_methods)
-
-        allow_headers = self._cors.allow_headers()
-        if allow_headers is not None:
-            rsp.set_header("Access-Control-Allow-Headers", allow_headers)
-
+    def __add_headers(self, rsp):
+        if self._headers is not None:
+            for header in self._headers:
+                rsp.set_header(header, self._headers[header])
 
 class JSONHandler(Handler):
 

@@ -67,7 +67,34 @@ class WebHandler(GeneratorBlock):
         self._server.add_handler(self.get_handler())
 
     def get_handler(self):
-        return Handler(self.endpoint(), self.cors(), self)
+        allow_origin = self.cors().allow_origin()
+        allow_credentials = self.cors().allow_credentials()
+        max_age = self.cors().max_age()
+        expose_headers = self.cors().expose_headers()
+        allow_methods = self.cors().allow_methods()
+        allow_headers = self.cors().allow_headers()
+
+        headers = dict()
+
+        if allow_origin is not None:
+            headers["Access-Control-Allow-Origin"] = allow_origin
+
+        if allow_credentials is not None:
+            headers["Access-Control-Allow-Credentials"] = allow_credentials
+
+        if max_age is not None:
+            headers["Access-Control-Max-Age"] = max_age
+
+        if expose_headers is not None:
+            headers["Access-Control-Expose-Headers"] = expose_headers
+
+        if allow_methods is not None:
+            headers["Access-Control-Allow-Methods"] = allow_methods
+
+        if allow_headers is not None:
+            headers["Access-Control-Allow-Headers"] = allow_headers
+
+        return Handler(self.endpoint(), blk=self, headers=headers)
 
     def __init__(self):
         super().__init__()
