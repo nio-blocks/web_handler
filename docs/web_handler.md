@@ -13,6 +13,16 @@ Properties
 - **ssl_enable**: Enables the optional SSL security for the web handler endpoint
 - **ssl_key**: Location of the SSL private key file to apply to the web server
 
+Advanced Properties
+-------------------
+- **cors**: Allows overriding for CORS headers on all HTTP reponses for this **endpoint**.
+    - **allow_credentials**: Set/override the `Access-Control-Allow-Credentials` reponse header.
+    - **allow_headers**: Set/override the `Access-Control-Allow-Headers` reponse header.
+    - **allow_methods**: Set/override the `Access-Control-Allow-Methods` reponse header.
+    - **allow_origin**: Set/override the `Access-Control-Allow-Origin` reponse header.
+    - **expose_headers**: Set/override the `Access-Control-Expose-Headers` reponse header.
+    - **max_age**: Set/override the `Access-Control-Max-Age` reponse header.
+
 Inputs
 ------
 None
