@@ -28,7 +28,7 @@ class CORS(PropertyHolder):
 
 class WebHandler(GeneratorBlock):
 
-    version = VersionProperty("1.1.0")
+    version = VersionProperty("1.2.0")
     host = StringProperty(title='Host', default='0.0.0.0', visible=False)
     port = IntProperty(title='Port', default=8182)
     endpoint = StringProperty(title='Endpoint', default='')
@@ -121,9 +121,10 @@ class WebHandler(GeneratorBlock):
         """ Override before_handler so that authentication is not required """
         return
 
+
 class WebJSONHandler(WebHandler):
 
-    version = VersionProperty("1.1.0")
+    version = VersionProperty("1.2.0")
 
     def get_handler(self):
         return JSONHandler(self.endpoint(), self)
