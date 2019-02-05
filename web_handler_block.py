@@ -6,25 +6,33 @@ from nio.properties import StringProperty, IntProperty, VersionProperty, \
                            ObjectProperty, TimeDeltaProperty, BoolProperty, \
                            PropertyHolder
 
+
 class CORS(PropertyHolder):
-    allow_origin = StringProperty(title='Access-Control-Allow-Origin',
-                                  default=None,
-                                  allow_none=True)
-    allow_credentials = StringProperty(title='Access-Control-Allow-Credentials',
-                                  default=None,
-                                  allow_none=True)
-    max_age = StringProperty(title='Access-Control-Max-Age',
-                                  default=None,
-                                  allow_none=True)
-    expose_headers = StringProperty(title='Access-Control-Expose-Headers',
-                                  default=None,
-                                  allow_none=True)
-    allow_methods = StringProperty(title='Access-Control-Allow-Methods',
-                                  default=None,
-                                  allow_none=True)
-    allow_headers = StringProperty(title='Access-Control-Allow-Headers',
-                                  default=None,
-                                  allow_none=True)
+    allow_origin = StringProperty(
+        title='Access-Control-Allow-Origin',
+        default=None,
+        allow_none=True)
+    allow_credentials = StringProperty(
+        title='Access-Control-Allow-Credentials',
+        default=None,
+        allow_none=True)
+    max_age = StringProperty(
+        title='Access-Control-Max-Age',
+        default=None,
+        allow_none=True)
+    expose_headers = StringProperty(
+        title='Access-Control-Expose-Headers',
+        default=None,
+        allow_none=True)
+    allow_methods = StringProperty(
+        title='Access-Control-Allow-Methods',
+        default=None,
+        allow_none=True)
+    allow_headers = StringProperty(
+        title='Access-Control-Allow-Headers',
+        default=None,
+        allow_none=True)
+
 
 class WebHandler(GeneratorBlock):
 
