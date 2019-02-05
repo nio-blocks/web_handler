@@ -1,6 +1,7 @@
 {
   "nio/WebHandler": {
     "from_python": "web_handler_block.WebHandler",
+    "from_readme": "docs/web_handler.md",
     "description": "Launches an HTTP server on the specified port and notifies signals when requests are made to that server.",
     "categories": [
       "Communication"
@@ -8,6 +9,7 @@
   },
   "nio/WebJSONHandler": {
     "from_python": "web_handler_block.WebJSONHandler",
+    "from_readme": "docs/web_json_handler.md",
     "description": "Handle incoming HTTP requests that contain a JSON body",
     "categories": [
       "Communication"
@@ -15,6 +17,7 @@
   },
   "nio/WebJSONOutput": {
     "from_python": "web_output_block.WebJSONOutput",
+    "from_readme": "docs/web_json_output.md",
     "description": "Respond to incoming HTTP requests made with the WebJSONHandler block with a JSON body response.",
     "categories": [
       "Communication"
@@ -22,6 +25,7 @@
   },
   "nio/WebOutput": {
     "from_python": "web_output_block.WebOutput",
+    "from_readme": "docs/web_output.md",
     "description": "This block writes to the response for a given HTTP request made to a WebHandler block",
     "categories": [
       "Communication"
