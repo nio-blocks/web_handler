@@ -3,8 +3,28 @@ from .handler import Handler, JSONHandler
 from nio import GeneratorBlock
 from nio.modules.web import WebEngine
 from nio.properties import StringProperty, IntProperty, VersionProperty, \
-                           TimeDeltaProperty, BoolProperty
+                           ObjectProperty, TimeDeltaProperty, BoolProperty, \
+                           PropertyHolder
 
+class CORS(PropertyHolder):
+    allow_origin = StringProperty(title='Access-Control-Allow-Origin',
+                                  default=None,
+                                  allow_none=True)
+    allow_credentials = StringProperty(title='Access-Control-Allow-Credentials',
+                                  default=None,
+                                  allow_none=True)
+    max_age = StringProperty(title='Access-Control-Max-Age',
+                                  default=None,
+                                  allow_none=True)
+    expose_headers = StringProperty(title='Access-Control-Expose-Headers',
+                                  default=None,
+                                  allow_none=True)
+    allow_methods = StringProperty(title='Access-Control-Allow-Methods',
+                                  default=None,
+                                  allow_none=True)
+    allow_headers = StringProperty(title='Access-Control-Allow-Headers',
+                                  default=None,
+                                  allow_none=True)
 
 class WebHandler(GeneratorBlock):
 
@@ -26,6 +46,11 @@ class WebHandler(GeneratorBlock):
                              default='',
                              allow_none=True)
 
+    cors = ObjectProperty(CORS,
+                          title="Access-Control Headers",
+                          default=CORS(),
+                          advanced=True)
+
     def configure(self, context):
         super().configure(context)
         config = {}
@@ -42,7 +67,34 @@ class WebHandler(GeneratorBlock):
         self._server.add_handler(self.get_handler())
 
     def get_handler(self):
-        return Handler(self.endpoint(), self)
+        allow_origin = self.cors().allow_origin()
+        allow_credentials = self.cors().allow_credentials()
+        max_age = self.cors().max_age()
+        expose_headers = self.cors().expose_headers()
+        allow_methods = self.cors().allow_methods()
+        allow_headers = self.cors().allow_headers()
+
+        headers = dict()
+
+        if allow_origin:
+            headers["Access-Control-Allow-Origin"] = allow_origin
+
+        if allow_credentials:
+            headers["Access-Control-Allow-Credentials"] = allow_credentials
+
+        if max_age:
+            headers["Access-Control-Max-Age"] = max_age
+
+        if expose_headers:
+            headers["Access-Control-Expose-Headers"] = expose_headers
+
+        if allow_methods:
+            headers["Access-Control-Allow-Methods"] = allow_methods
+
+        if allow_headers:
+            headers["Access-Control-Allow-Headers"] = allow_headers
+
+        return Handler(self.endpoint(), blk=self, headers=headers)
 
     def __init__(self):
         super().__init__()

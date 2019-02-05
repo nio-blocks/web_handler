@@ -9,26 +9,30 @@ class Handler(RESTHandler):
 
     """ A REST Handler that will listen for HTTP requests and register them """
 
-    def __init__(self, endpoint, blk):
+    def __init__(self, endpoint, blk, headers=None):
         super().__init__('/' + endpoint)
         self._blk = blk
         self.logger = blk.logger
+        self._headers = headers
 
     def on_get(self, req, rsp):
+        self.__add_headers(rsp)
         self.run_request('GET', req, rsp, include_body=False)
 
     def on_post(self, req, rsp):
+        self.__add_headers(rsp)
         self.run_request('POST', req, rsp, include_body=True)
 
     def on_put(self, req, rsp):
+        self.__add_headers(rsp)
         self.run_request('PUT', req, rsp, include_body=True)
 
     def on_delete(self, req, rsp):
+        self.__add_headers(rsp)
         self.run_request('DELETE', req, rsp, include_body=False)
 
     def on_options(self, req, rsp):
-        # Don't do anything except simply handle OPTIONS requests for CORS
-        pass
+        self.__add_headers(rsp)
 
     def run_request(self, method, req, rsp, include_body=False):
         """ Record an HTTP request for a given method """
@@ -96,6 +100,10 @@ class Handler(RESTHandler):
         rsp.set_status(501)
         return False
 
+    def __add_headers(self, rsp):
+        if self._headers is not None:
+            for header in self._headers:
+                rsp.set_header(header, self._headers[header])
 
 class JSONHandler(Handler):
 
