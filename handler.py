@@ -43,7 +43,7 @@ class Handler(RESTHandler):
             return
 
         # Generate a unique ID for this request
-        request_id = uuid4()
+        request_id = str(uuid4())
 
         # Register this request with the broker
         self.logger.debug(

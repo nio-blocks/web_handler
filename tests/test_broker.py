@@ -65,7 +65,7 @@ class TestBroker(NIOBlockTestCase):
 
     def register_request(self, timeout):
         """ Register a request in a new thread and return the ID and resp """
-        req_id = uuid4()
+        req_id = str(uuid4())
         mock_rsp = self.get_mocked_response()
         mock_req = self.get_mocked_request()
         RequestResponseBroker.register_request(
